@@ -7,11 +7,11 @@ import java.io.File;
 import java.io.IOException;
 
 public class Figure {
-    private static BufferedImage image;
-    private boolean team; // white = true;
-    private boolean alive;
-    private int x;
-    private int y;
+    protected static BufferedImage image;
+    protected boolean team; // white = true;
+    protected boolean alive;
+    protected int x;
+    protected int y;
     protected String name;
 
     public Figure(boolean team, int x, int y) {
@@ -33,7 +33,7 @@ public class Figure {
     public Figure move(int x2, int y2){
         return this;
     }
-    public boolean valid(int x2, int y2){
+    public boolean valid(int x2, int y2,  Figure[] figures){
         return true;
     }
 
