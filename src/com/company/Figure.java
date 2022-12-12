@@ -69,10 +69,9 @@ public class Figure {
         this.y = y;
     }
 
-    public static Figure find(int x, int y, Figure figure[]){
-        for (int i = 0; i < figure.length; i++) {
-            if(figure[i].getX() == x && figure[i].getY()==y);
-                return figure[i];
+    public static Figure find(int x, int y, Figure[] figure){
+        for (Figure value : figure) {
+            if (value!= null && value.getX() == x && value.getY() == y) return value;
         }
         return null;
     }
