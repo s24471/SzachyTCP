@@ -1,10 +1,9 @@
 package com.company;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
 
 public class Board extends Component{
     private JPanel board;
@@ -18,15 +17,19 @@ public class Board extends Component{
         board = new JPanel(new GridLayout(rows, cols));
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                JLabel label = new JLabel();
+                Tile label = new Tile(i, j);
                 label.setOpaque(true);
                 if ((i + j) % 2 == 0) {
                     label.setBackground(new Color(0x759555));
                 } else {
                     label.setBackground(new Color(0xECECD0));
                 }
-                if(Figure.find(i,j, figures)!=null)label.setIcon(new ImageIcon(Figure.find(i,j, figures).getImage()));
-                /*label.addComponentListener(new ComponentListener() {
+                /*
+                @TODO
+                  proponuje zrobic metode set figure ktora od razu ustawia imageIcon figury jako ikone pola,
+                  ale tez pozwala nam przechowywac obiekt figury
+                 */
+                if(Figure.find(i,j, figures)!=null)label.setIcon(new ImageIcon(Figure.find(i,j, figures).getImage())); /*label.addComponentListener(new ComponentListener() {
                     @Override
                     public void componentResized(ComponentEvent e) {
                         Figure tmp = Figure.find(label.getX()/100, label.getY()/100, figures);
@@ -56,6 +59,53 @@ public class Board extends Component{
 
             }
         }
+        board.addMouseListener(new MouseInputListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Tile tmp = (Tile) e.getComponent();
+                int i = tmp.getRow();
+                int j = tmp.getCol();
+                //@TODO potrzebujemy mouseListenera dla dwoch klikniec: wybrania pionka, i wskazania gdzie ma isc (jak masz jakies pomysly to daj znac)
+                if(tmp.isActive())
+                    ;
+                    /*
+                    @TODO
+                      przypisac figure do pola, zeby mozna bylo wyciagnac obiekt figury z kliknietego pola.
+                      na tej podstawie sprawdzac mozliwosci ruchu i wyciagac ikone z figury zwroconej przez klikniete pole.
+                     */
+                else tmp.setActive(true);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+
+            }
+        });
     }
     public void createGUI() {
         JFrame frame = new JFrame();
