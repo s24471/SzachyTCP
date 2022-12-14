@@ -9,9 +9,10 @@ public class Board extends Component{
     private JPanel board;
     private int rows, cols;
     private Figure figures[];
+    private boolean isActive;
     public Board(){
         setup();
-
+        isActive = false;
         rows = 8;
         cols = 8;
         board = new JPanel(new GridLayout(rows, cols));
@@ -66,14 +67,17 @@ public class Board extends Component{
                 int i = tmp.getRow();
                 int j = tmp.getCol();
                 //@TODO potrzebujemy mouseListenera dla dwoch klikniec: wybrania pionka, i wskazania gdzie ma isc (jak masz jakies pomysly to daj znac)
-                if(tmp.isActive())
-                    ;
+                if(!isActive) {
                     /*
                     @TODO
                       przypisac figure do pola, zeby mozna bylo wyciagnac obiekt figury z kliknietego pola.
                       na tej podstawie sprawdzac mozliwosci ruchu i wyciagac ikone z figury zwroconej przez klikniete pole.
                      */
-                else tmp.setActive(true);
+                    isActive = true;
+                }
+                else {
+                    isActive = false;
+                }
             }
 
             @Override
