@@ -3,14 +3,20 @@ package com.company;
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class Board extends Component{
     private JPanel board;
     private int rows, cols;
-    private Figure figures[];
+    private Figure[] figures; //@todo mozna przeniesc sie z figures[] w 100% na tiles[][] i usunac
+    private Tile tiles[][];
     private boolean isActive;
+    private Tile activeTile;
     public Board(){
+        tiles=new Tile[8][8];
         setup();
         isActive = false;
         rows = 8;
@@ -21,23 +27,19 @@ public class Board extends Component{
                 Tile label = new Tile(i, j);
                 label.setOpaque(true);
                 if ((i + j) % 2 == 0) {
-                    label.setBackground(new Color(0x759555));
+                    label.setColor(new Color(0x759555));
                 } else {
-                    label.setBackground(new Color(0xECECD0));
+                    label.setColor(new Color(0xECECD0));
                 }
-                /*
-                @TODO
-                  proponuje zrobic metode set figure ktora od razu ustawia imageIcon figury jako ikone pola,
-                  ale tez pozwala nam przechowywac obiekt figury
-                 */
-                if(Figure.find(i,j, figures)!=null)label.setIcon(new ImageIcon(Figure.find(i,j, figures).getImage())); /*label.addComponentListener(new ComponentListener() {
+                if(Figure.find(i,j, figures)!=null) label.setFigure(Figure.find(i, j, figures));
+                /*label.addComponentListener(new ComponentListener() {
                     @Override
                     public void componentResized(ComponentEvent e) {
                         Figure tmp = Figure.find(label.getX()/100, label.getY()/100, figures);
                         System.out.println(label.getX()/100 +" "+label.getY()/100);
                         if (tmp != null) {
                             System.out.println("did");
-                            label.setIcon(new ImageIcon(tmp.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_FAST)));//@TODO za wolne!!!
+                            label.setIcon(new ImageIcon(tmp.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_FAST)));
                         }
                     }
 
@@ -56,60 +58,47 @@ public class Board extends Component{
 
                     }
                 });*/
+                tiles[i][j]=label;
+                label.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        Tile tmp = (Tile)e.getComponent();
+                        int i = tmp.getRow();
+                        int j = tmp.getCol();
+                        System.out.println(i +" "+ j);
+                        if(isActive){
+                            isActive=!isActive;
+                            activeTile.setBackground(activeTile.getColor());
+                            ArrayList<Point> moves = activeTile.getFigure().moves(figures);
+                            if(Objects.equals(tmp.getBackground(), new Color(0x00CCFF))){
+                                if(tmp.getFigure()!=null){
+                                    tmp.getFigure().setAlive(false);
+                                }
+                                tmp.setFigure(activeTile.getFigure().move(i,j));
+                                activeTile.setFigure(null);
+                            }
+                            for (Point p:moves) {
+                                tiles[p.x][p.y].setBackground(tiles[p.x][p.y].getColor());
+                            }
+
+                        }else {
+                            if (tmp.getFigure() != null) {
+                                activeTile = tmp;
+                                tmp.setBackground(Color.red);
+                                ArrayList<Point> moves = tmp.getFigure().moves(figures);
+                                for (Point p : moves) {
+                                    tiles[p.x][p.y].setBackground(new Color(0x00CCFF));
+                                }
+                                isActive=!isActive;
+                            }
+                        }
+
+                    }
+                });
                 board.add(label, i, j);
 
             }
         }
-        board.addMouseListener(new MouseInputListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Tile tmp = (Tile) e.getComponent();
-                int i = tmp.getRow();
-                int j = tmp.getCol();
-                //@TODO potrzebujemy mouseListenera dla dwoch klikniec: wybrania pionka, i wskazania gdzie ma isc (jak masz jakies pomysly to daj znac)
-                if(!isActive) {
-                    /*
-                    @TODO
-                      przypisac figure do pola, zeby mozna bylo wyciagnac obiekt figury z kliknietego pola.
-                      na tej podstawie sprawdzac mozliwosci ruchu i wyciagac ikone z figury zwroconej przez klikniete pole.
-                     */
-                    isActive = true;
-                }
-                else {
-                    isActive = false;
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-
-            }
-        });
     }
     public void createGUI() {
         JFrame frame = new JFrame();
