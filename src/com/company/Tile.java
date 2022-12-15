@@ -1,5 +1,6 @@
 package com.company;
 
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,27 +14,34 @@ public class Tile extends JLabel {
         this.row = row;
     }
 
-    public int getRow() {
-        return row;
-    }
-    public int getCol() {
-        return col;
-    }
-    public Figure getFigure() {
-        return figure;
-    }
-    public void setFigure(Figure figure) {
-        this.figure = figure;
-        if(figure!=null)this.setIcon(new ImageIcon(figure.getImage()));
-        else this.setIcon(null);
+    public void resetBackground() {
+        this.setBackground(color);
     }
 
-    public Color getColor() {
-        return color;
+    public void setFigure(Figure figure) {
+        this.figure = figure;
+        if (figure != null) this.setIcon(new ImageIcon(figure.getImage()));
+        else this.setIcon(null);
     }
 
     public void setColor(Color color) {
         this.color = color;
         this.setBackground(color);
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public Figure getFigure() {
+        return figure;
+    }
+
+    public Color getColor() {
+        return color;
     }
 }
