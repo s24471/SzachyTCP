@@ -15,6 +15,7 @@ public class Figure {
     protected String name;
     protected int x;
     protected int y;
+    protected int value;
 
     public Figure(boolean team, int x, int y) {
         this.team = team;
@@ -49,6 +50,7 @@ public class Figure {
     }
 
     public void kill() {
+        Main.update(value, team);
         alive = false;
     }
 
@@ -88,6 +90,10 @@ public class Figure {
         this.y = y;
     }
 
+    public void setValue(int value) {
+        this.value = value;
+    }
+
     public Image getImage() {
         try {
             return ImageIO.read(new File("pieces/" + name + (getTeam() ? "W" : "B") + ".png")).getScaledInstance(100, 100, Image.SCALE_SMOOTH);
@@ -107,5 +113,9 @@ public class Figure {
 
     public int getY() {
         return y;
+    }
+
+    public int getValue() {
+        return value;
     }
 }
