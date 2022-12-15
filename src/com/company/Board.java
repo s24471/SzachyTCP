@@ -65,22 +65,34 @@ public class Board extends Component{
                         Tile tmp = (Tile)e.getComponent();
                         int i = tmp.getRow();
                         int j = tmp.getCol();
-                        System.out.println(i +" "+ j);
-                        if(isActive){
-                            isActive=!isActive;
+                        if(isActive) {
+                            isActive = false;
                             activeTile.setBackground(activeTile.getColor());
-                            ArrayList<Point> moves = activeTile.getFigure().moves(figures);
-                            if(Objects.equals(tmp.getBackground(), new Color(0x00CCFF))){
-                                if(tmp.getFigure()!=null){
+                            if (Objects.equals(tmp.getBackground(), new Color(0x00CCFF))) {
+                                ArrayList<Point> moves = activeTile.getFigure().moves(figures);
+                                for (Point p : moves) {
+                                    tiles[p.x][p.y].setBackground(tiles[p.x][p.y].getColor());
+                                }
+                                if (tmp.getFigure() != null) {
                                     tmp.getFigure().setAlive(false);
                                 }
-                                tmp.setFigure(activeTile.getFigure().move(i,j));
+                                tmp.setFigure(activeTile.getFigure().move(i, j));
                                 activeTile.setFigure(null);
+                            } else {
+                                ArrayList<Point> moves = activeTile.getFigure().moves(figures);
+                                for (Point p : moves) {
+                                    tiles[p.x][p.y].setBackground(tiles[p.x][p.y].getColor());
+                                }
+                                if (tmp.getFigure() != null) {
+                                    isActive = true;
+                                    activeTile = tmp;
+                                    tmp.setBackground(Color.red);
+                                    moves = tmp.getFigure().moves(figures);
+                                    for (Point p : moves) {
+                                        tiles[p.x][p.y].setBackground(new Color(0x00CCFF));
+                                    }
+                                }
                             }
-                            for (Point p:moves) {
-                                tiles[p.x][p.y].setBackground(tiles[p.x][p.y].getColor());
-                            }
-
                         }else {
                             if (tmp.getFigure() != null) {
                                 activeTile = tmp;
@@ -89,7 +101,7 @@ public class Board extends Component{
                                 for (Point p : moves) {
                                     tiles[p.x][p.y].setBackground(new Color(0x00CCFF));
                                 }
-                                isActive=!isActive;
+                                isActive=true;
                             }
                         }
 
