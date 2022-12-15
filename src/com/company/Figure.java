@@ -74,9 +74,9 @@ public class Figure {
         this.y = y;
     }
 
-    public static Figure find(int x, int y, Figure[] figure){
+    public static Figure find(int x2, int y2, Figure[] figure){
         for (Figure value : figure) {
-            if (value!= null && value.getX() == x && value.getY() == y && value.isAlive()) return value;
+            if (value!= null && value.getX() == x2 && value.getY() == y2 && value.isAlive()) return value;
         }
         return null;
     }
@@ -90,5 +90,18 @@ public class Figure {
             }
         }
         return ans;
+    }
+
+    public static boolean isBetween(int xStart, int yStart, int xStop, int yStop, Figure[] figures){
+        if(xStart!=xStop)xStart += xStart<xStop?1:-1;
+        if(yStart!=yStop)yStart += yStart<yStop?1:-1;
+        while(xStart!=xStop || yStart!=yStop){
+            if(find(xStart, yStart, figures)!=null){
+                return true;
+            }
+            if(xStart!=xStop)xStart += xStart<xStop?1:-1;
+            if(yStart!=yStop)yStart += yStart<yStop?1:-1;
+        }
+        return false;
     }
 }
