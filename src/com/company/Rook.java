@@ -8,11 +8,11 @@ public class Rook extends Figure{
     @Override
     public boolean valid(int x2, int y2, Figure[] figures) {
         Figure figure = Figure.find(x2, y2, figures);
+        if(figure!=null && figure.getTeam()==team)return false;
         int x3 = x2-x;
         int y3 = y2-y;
         if(x3!=0 && y3!=0)return false;
         if(isBetween(x,y,x2,y2,figures))return false;
-        if(figure!=null && figure.getTeam()==team)return false;
         return true;
     }
 }
