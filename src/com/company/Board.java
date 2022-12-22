@@ -17,7 +17,9 @@ public class Board extends Component {
     private Tile[][] tiles;
     private Tile activeTile;
 
-    public Board() {
+    public static boolean team; // white = true
+    public Board(boolean t) {
+        this.team = t;
         tiles = new Tile[ROWS][COLUMNS];
         board = new JPanel(new GridLayout(ROWS, COLUMNS));
         setup();
@@ -28,7 +30,7 @@ public class Board extends Component {
                 Tile tile = new Tile(i, j);
                 tile.setOpaque(true);
 
-                if ((i + j) % 2 == 0) tile.setColor(COLOR_TILE_1);
+                if ((i + j) % 2 == (team?0:1)) tile.setColor(COLOR_TILE_1);
                 else tile.setColor(COLOR_TILE_2);
 
                 if (Figure.find(i, j) != null) tile.setFigure(Figure.find(i, j));
@@ -60,6 +62,7 @@ public class Board extends Component {
                     }
 
                     public void newActive(Tile tilePressed) {
+                        if(tilePressed.getFigure().getTeam()!=team)return;
                         activeTile = tilePressed;
                         tilePressed.setBackground(COLOR_CHOSEN);
 
@@ -108,5 +111,9 @@ public class Board extends Component {
 
         new King(true, 0, 4);
         new King(false, 7, 4);
+    }
+
+    public void check(Figure[] figures){
+
     }
 }

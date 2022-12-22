@@ -19,6 +19,7 @@ public class Figure {
 
     public Figure(boolean team, int x, int y) {
         this.team = team;
+        if(!Board.team)this.team=!team;
         this.x = x;
         this.y = y;
         alive = true;

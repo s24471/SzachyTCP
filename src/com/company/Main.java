@@ -1,5 +1,7 @@
 package com.company;
 
+import java.net.Socket;
+
 public class Main {
     public static int scoreW;
     public static int scoreB;
@@ -11,7 +13,9 @@ public class Main {
     public Main() {
         scoreW = 0;
         scoreB = 0;
-        new Board().createGUI();
+        Board board = new Board(true);
+        board.createGUI();
+        Socket socket = new Socket();
     }
 
     public static void update(int x, boolean team) {
